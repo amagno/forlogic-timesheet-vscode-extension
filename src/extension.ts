@@ -10,24 +10,29 @@ export function activate(context: vscode.ExtensionContext) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "forlogic-timesheet" is now active!');
-
+    let statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);  
+    let timer = new StatusTimer(statusBar);      
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('extension.startTimeSheet', () => {
+    let disposableStart = vscode.commands.registerCommand('extension.startTimeSheet', () => {
         // The code you place here will be executed every time your command is executed
 
         // Display a message box to the user
-        vscode.window.showInformationMessage('time started');
-
-        let statusBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-        let timer = new StatusTimer(statusBar);
+        vscode.window.showInformationMessage('Timesheet Timer Começou !');
         timer.start();
-
+        // StatusTimer.showTimer();s
+    });
+    let disposableStop = vscode.commands.registerCommand('extension.stopTimeSheet', () => {
+        // The code you place here will be executed every time your command is executed
+        // Display a message box to the user
+        vscode.window.showInformationMessage('Timesheet Timer Parou: ' + timer.fomated);
+        timer.stop();
         // StatusTimer.showTimer();s
     });
 
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(disposableStart);
+    context.subscriptions.push(disposableStop);
 }
 
 // this method is called when your extension is deactivated
@@ -65,6 +70,17 @@ class StatusTimer {
         this.minutes = 0;
         this.hours = 0;
         this.statusBar.hide();
+    }
+    get time(): {
+        seconds: number;
+        minutes: number;
+        hours: number;
+    } {
+        return {
+            seconds: this.seconds,
+            minutes: this.minutes,
+            hours: this.hours
+        };
     }
     get fomated(): string {
         return 'Timesheet Timer: ' + (this.hours ? this.hours + ' horas ' : '') +

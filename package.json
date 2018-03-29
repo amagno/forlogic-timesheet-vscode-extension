@@ -11,7 +11,8 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.startTimeSheet"
+        "onCommand:extension.startTimeSheet",
+        "onCommand:extension.stopTimeSheet"
     ],
     "main": "./out/extension",
     "contributes": {
@@ -19,6 +20,10 @@
             {
                 "command": "extension.startTimeSheet",
                 "title": "Start Timesheet"
+            },
+            {
+                "command": "extension.stopTimeSheet",
+                "title": "Stop Timesheet"
             }
         ]
     },
